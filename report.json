@@ -1,0 +1,41 @@
+{
+  "monthly_average_balance" : {
+    "2026-04" : "1320098.53",
+    "2026-05" : "2539961.19",
+    "2026-06" : "4475482.73",
+    "2026-07" : "5208800.79",
+    "2026-08" : "5961470.88",
+    "2026-09" : "6909101.83"
+  },
+  "bounces" : [ {
+    "deposit" : 19,
+    "return" : 27,
+    "charge" : 28
+  }, {
+    "deposit" : 55,
+    "return" : 59,
+    "charge" : 60
+  }, {
+    "deposit" : 183,
+    "return" : 187,
+    "charge" : 188
+  } ],
+  "round_trips" : [ {
+    "credit" : 235,
+    "debit" : 236,
+    "counterparty" : "KRISHNA TRADELINKS",
+    "amount" : "360000.00",
+    "gap_days" : 0
+  }, {
+    "credit" : 190,
+    "debit" : 194,
+    "counterparty" : "TARA VENTURES",
+    "amount" : "360000.00",
+    "gap_days" : 2
+  } ],
+  "balance_breaks" : [ {
+    "line" : 205,
+    "expected" : "6062332.52",
+    "printed" : "6087332.52"
+  } ]
+}
