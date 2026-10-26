@@ -86,7 +86,7 @@ Reported line numbers refer to physical lines in the original CSV, including the
 
 ## Assumptions
 
-- **Monthly balance:** The closing balance is carried forward on days without transactions. When multiple transactions occur on the same day, the last row's printed balance is used. In the first partial month, calculations start from the opening balance date because earlier balances are unknown.
+- **Monthly balance:** The closing balance is carried forward on days without transactions. When multiple transactions occur on the same day, the last row's printed balance is used. In the first partial month, calculations start from the opening balance date because earlier balances are unknown.The monthly average is rounded to two decimal places using the HALF_UP rounding rule.
 - **Cheque bounces:** Deposits, returns, and charges are matched using supported cheque-description patterns and instrument identifiers. Ambiguous matches are skipped rather than guessed.
 - **Round trips:** Incoming and outgoing amounts must match exactly, be at least ₹1,00,000, and have matching normalized counterparties. The outgoing transaction must follow the incoming transaction within 48 hours. Since the CSV contains dates but no times, dates are treated as midnight.
 - **Balance validation:** Each transaction is checked using the previous printed balance plus credit minus debit. After a mismatch, the next check uses the current row's printed balance.
