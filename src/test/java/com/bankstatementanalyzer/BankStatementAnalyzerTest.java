@@ -29,7 +29,7 @@ class BankStatementAnalyzerTest {
                 row("2024-01-01", "UPI-CR-ALPHA", "", "10.00", "110.00"),
                 row("2024-01-03", "UPI-DR-BETA", "5.00", "", "105.00"));
 
-        assertEquals(Map.of("2024-01", "108.33"),
+        assertEquals(Map.of("2024-01", "105.32"),
                 new MonthlyAverageBalanceAnalyzer().analyze(statement));
     }
 
@@ -41,7 +41,7 @@ class BankStatementAnalyzerTest {
                 row("2024-01-01", "UPI-DR-BETA", "3.00", "", "107.00"),
                 row("2024-01-02", "UPI-DR-BETA", "2.00", "", "105.00"));
 
-        assertEquals(Map.of("2024-01", "106.00"),
+        assertEquals(Map.of("2024-01", "105.06"),
                 new MonthlyAverageBalanceAnalyzer().analyze(statement));
     }
 
@@ -52,7 +52,39 @@ class BankStatementAnalyzerTest {
                 row("2024-01-31", "UPI-CR-ALPHA", "", "10.00", "60.00"),
                 row("2024-02-02", "UPI-DR-BETA", "10.00", "", "50.00"));
 
-        assertEquals(Map.of("2024-01", "60.00", "2024-02", "55.00"),
+        assertEquals(Map.of("2024-01", "60.00", "2024-02", "50.34"),
+                new MonthlyAverageBalanceAnalyzer().analyze(statement));
+    }
+
+    @Test
+    void doesNotBackfillUnknownDaysBeforeTheOpeningBalanceDate() throws Exception {
+        BankStatement statement = parse(
+                row("2024-01-31", "OPENING BALANCE", "", "", "50.00"),
+                row("2024-01-31", "UPI-CR-ALPHA", "", "10.00", "60.00"),
+                row("2024-02-02", "UPI-DR-BETA", "10.00", "", "50.00"));
+
+        assertEquals(Map.of("2024-01", "60.00", "2024-02", "50.34"),
+                new MonthlyAverageBalanceAnalyzer().analyze(statement));
+    }
+
+    @Test
+    void averagesLeapFebruaryAndCarriesTheLastBalanceThroughMonthEnd() throws Exception {
+        BankStatement statement = parse(
+                row("2024-02-28", "OPENING BALANCE", "", "", "100.00"),
+                row("2024-02-28", "UPI-CR-ALPHA", "", "1.00", "101.00"),
+                row("2024-03-01", "UPI-DR-BETA", "1.00", "", "100.00"));
+
+        assertEquals(Map.of("2024-02", "101.00", "2024-03", "100.00"),
+                new MonthlyAverageBalanceAnalyzer().analyze(statement));
+    }
+
+    @Test
+    void carriesSeptember2026ClosingBalanceThroughMonthEnd() throws Exception {
+        BankStatement statement = parse(
+                row("2026-09-01", "OPENING BALANCE", "", "", "100.00"),
+                row("2026-09-29", "UPI-CR-ALPHA", "", "10.00", "110.00"));
+
+        assertEquals(Map.of("2026-09", "100.67"),
                 new MonthlyAverageBalanceAnalyzer().analyze(statement));
     }
 
